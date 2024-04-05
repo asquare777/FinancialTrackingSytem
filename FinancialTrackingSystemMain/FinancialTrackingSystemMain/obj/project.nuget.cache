@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "JYDTTSSgnsNwva/tvuyG9HRfxsjKyvXBO6NFFNYeSMSnBUEOENNtMrZePFOzr0VnNCjjN6lbLDsio0R+9V2ZGg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Lenovo\\source\\repos\\FinancialTransactionSystem\\FinancialTrackingSystemMain\\FinancialTrackingSystemMain\\FinancialTrackingSystemMain.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Lenovo\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\Lenovo\\.nuget\\packages\\rabbitmq.client\\6.8.1\\rabbitmq.client.6.8.1.nupkg.sha512",
+    "C:\\Users\\Lenovo\\.nuget\\packages\\system.memory\\4.5.5\\system.memory.4.5.5.nupkg.sha512",
+    "C:\\Users\\Lenovo\\.nuget\\packages\\system.threading.channels\\7.0.0\\system.threading.channels.7.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
