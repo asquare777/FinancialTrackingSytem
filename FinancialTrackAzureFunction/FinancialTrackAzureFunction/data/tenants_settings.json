@@ -1,0 +1,134 @@
+{
+  "tenantsettings": [
+    {
+      "tenantid": "345",
+      "velocitylimits": {
+        "daily": "2500"
+      },
+      "thresholds": {
+        "pertransaction": "1500"
+      },
+      "countrysanctions": {
+        "sourcecountrycode": "AFG, BLR, BIH, IRQ, KEN, RUS",
+        "destinationcountrycode": "AFG, BLR, BIH, IRQ, KEN, RUS, TKM, UGA"
+      }
+    },
+    {
+      "tenantid": "123",
+      "velocitylimits": {
+        "daily": "2000"
+      },
+      "thresholds": {
+        "pertransaction": "1000"
+      },
+      "countrysanctions": {
+        "sourcecountrycode": "USA, CAN, MEX",
+        "destinationcountrycode": "USA, CAN, MEX, BRA, ARG"
+      }
+    },
+    {
+      "tenantid": "678",
+      "velocitylimits": {
+        "daily": "3000"
+      },
+      "thresholds": {
+        "pertransaction": "2000"
+      },
+      "countrysanctions": {
+        "sourcecountrycode": "GBR, FRA, GER",
+        "destinationcountrycode": "GBR, FRA, GER, ESP, ITA"
+      }
+    },
+    {
+      "tenantid": "456",
+      "velocitylimits": {
+        "daily": "1800"
+      },
+      "thresholds": {
+        "pertransaction": "1200"
+      },
+      "countrysanctions": {
+        "sourcecountrycode": "AUS, NZL",
+        "destinationcountrycode": "AUS, NZL, CHN, JPN"
+      }
+    },
+    {
+      "tenantid": "789",
+      "velocitylimits": {
+        "daily": "2700"
+      },
+      "thresholds": {
+        "pertransaction": "1750"
+      },
+      "countrysanctions": {
+        "sourcecountrycode": "IND, PAK, BAN",
+        "destinationcountrycode": "IND, PAK, BAN, SRI, NEP"
+      }
+    },
+    {
+      "tenantid": "234",
+      "velocitylimits": {
+        "daily": "2200"
+      },
+      "thresholds": {
+        "pertransaction": "1300"
+      },
+      "countrysanctions": {
+        "sourcecountrycode": "NGA, ETH, ZAF",
+        "destinationcountrycode": "NGA, ETH, ZAF, EGY, KEN"
+      }
+    },
+    {
+      "tenantid": "890",
+      "velocitylimits": {
+        "daily": "3200"
+      },
+      "thresholds": {
+        "pertransaction": "1800"
+      },
+      "countrysanctions": {
+        "sourcecountrycode": "COL, PER, CHL",
+        "destinationcountrycode": "COL, PER, CHL, VEN, ECU"
+      }
+    },
+    {
+      "tenantid": "567",
+      "velocitylimits": {
+        "daily": "2100"
+      },
+      "thresholds": {
+        "pertransaction": "1100"
+      },
+      "countrysanctions": {
+        "sourcecountrycode": "TUR, IRN",
+        "destinationcountrycode": "TUR, IRN, SAU, QAT"
+      }
+    },
+    {
+      "tenantid": "678",
+      "velocitylimits": {
+        "daily": "2800"
+      },
+      "thresholds": {
+        "pertransaction": "1600"
+      },
+      "countrysanctions": {
+        "sourcecountrycode": "ESP, ITA, POR",
+        "destinationcountrycode": "ESP, ITA, POR, GRC, CYP"
+      }
+    },
+    {
+      "tenantid": "901",
+      "velocitylimits": {
+        "daily": "1900"
+      },
+      "thresholds": {
+        "pertransaction": "1400"
+      },
+      "countrysanctions": {
+        "sourcecountrycode": "THA, MYS, VNM",
+        "destinationcountrycode": "THA, MYS, VNM, IDN, PHL"
+      }
+    }
+  ]
+}
