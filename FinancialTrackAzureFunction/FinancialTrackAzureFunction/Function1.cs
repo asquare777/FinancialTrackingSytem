@@ -9,7 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyNamespace
+namespace FinancialTrackAzureFunction
 {
     public static class Function1
     {
