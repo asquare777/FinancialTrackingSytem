@@ -1,5 +1,6 @@
 ﻿using FinancialTrackAzureFunction.Models;
 using FinancialTrackAzureFunction.Models.Tenant;
+using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,13 @@ namespace FinancialTrackAzureFunction.Services
 {
     public class Validator
     {
-        private TenantSetting ReadTenantJsonfile(string path, string tenantId)
+        private readonly string path;
+        public Validator()
+        {
+            path = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName, "data", "tenants_settings.json");
+        }
+
+        private TenantSetting ReadTenantJsonfile(string tenantId)
         {
             if (!File.Exists(path))
                 throw new FileNotFoundException("JSON file not found: ", path);
@@ -31,35 +38,61 @@ namespace FinancialTrackAzureFunction.Services
             return null;
         }
 
-        public bool Validate(Transaction transaction)
+        private async Task<bool> IsValidVelocityTransaction(string tenantId, decimal transactionAmount, string storedVelocityLimit, IDurableEntityClient entityClient)
         {
-            if (transaction == null)
-                throw new ArgumentNullException();
-            string tenantId = transaction.tenantId;
-            string absPath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName, "data", "tenants_settings.json");
-            TenantSetting tenantSetting = ReadTenantJsonfile(absPath, tenantId);
-            if (tenantSetting == null)
-                return false;
-            // compare the velocity limit
-            decimal transactionAmount = Decimal.Parse(transaction.amount);
-            decimal velocityLimit = Decimal.Parse(tenantSetting?.velocitylimits?.daily);
-            if (transactionAmount > velocityLimit)
+            try
             {
+                var entityId = new EntityId("VelocityLimitEntity", tenantId);
+                decimal velocityLimit = Decimal.Parse(storedVelocityLimit);
+                var stateResponse = await entityClient.ReadEntityStateAsync<decimal>(entityId);
+                if (stateResponse.EntityExists)
+                    velocityLimit = stateResponse.EntityState;
+                if (transactionAmount < velocityLimit)
+                {
+                    decimal NewVelocityLimit = velocityLimit - transactionAmount;
+                    await entityClient.SignalEntityAsync(entityId, "set", NewVelocityLimit);
+                    return true;
+                }
                 return false;
             }
-            var threshold = Decimal.Parse(tenantSetting?.thresholds?.pertransaction);
-            if (transactionAmount > threshold)
-                return false;
-            var tenantSettingSanctions = tenantSetting.countrysanctions;
-            var sansctionsSources = tenantSettingSanctions.sourcecountrycode.Split(",");
-            var sansctionsDestinations = tenantSettingSanctions.destinationcountrycode.Split(",");
-            var transactionSource = transaction.sourceaccount?.countrycode;
-            var transactionDestination = transaction.destinationaccount?.countrycode;
-            if (sansctionsSources.Any(source => transactionSource.Trim().ToLower() == source.Trim().ToLower()))
-                return false;
-            if (sansctionsDestinations.Any(source => transactionDestination.Trim().ToLower() == source.Trim().ToLower()))
-                return false;
-            return true;
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<bool> Validate(Transaction transaction, IDurableEntityClient entityClient)
+        {
+            try
+            {
+                if (transaction == null)
+                    throw new ArgumentNullException();
+                string tenantId = transaction.tenantId;
+                TenantSetting tenantSetting = ReadTenantJsonfile(tenantId);
+                if (tenantSetting == null)
+                    return false;
+                // compare the velocity limit
+                decimal transactionAmount = Decimal.Parse(transaction.amount);
+                var threshold = Decimal.Parse(tenantSetting?.thresholds?.pertransaction);
+                if (transactionAmount > threshold)
+                    return false;
+                bool isValidVelocityTransaction = await IsValidVelocityTransaction(transaction.tenantId, transactionAmount, tenantSetting?.velocitylimits?.daily, entityClient);
+                if (!isValidVelocityTransaction)
+                    return false;
+                var tenantSettingSanctions = tenantSetting.countrysanctions;
+                var sansctionsSources = tenantSettingSanctions.sourcecountrycode.Split(",");
+                var sansctionsDestinations = tenantSettingSanctions.destinationcountrycode.Split(",");
+                var transactionSource = transaction.sourceaccount?.countrycode;
+                var transactionDestination = transaction.destinationaccount?.countrycode;
+                if (sansctionsSources.Any(source => transactionSource.Trim().ToLower() == source.Trim().ToLower()))
+                    return false;
+                if (sansctionsDestinations.Any(source => transactionDestination.Trim().ToLower() == source.Trim().ToLower()))
+                    return false;
+                return true;
+            }catch(Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
